@@ -73,12 +73,17 @@ export class TreeControl extends Component {
     tab.CheckedState ? this.resetCheckedState(tab) : set()
   }
 
+  reAlignTree = () =>{
+    console.log(this.props.tabs)
+
+  }
+
 
   mapParentCheckedState = (parent) => {
       const ChildTabs = parent.ChildTabs || []
       const length = ChildTabs.length
       const checkedArray = []
-      const truthyChecked = parent.ChildTabs.map(tab => tab.CheckedState==this.props.fullyChecked ?  checkedArray.push(true) : checkedArray.push(false) )
+      const truthyChecked = parent.ChildTabs.map(tab => tab.CheckedState!==this.props.unchecked ?  checkedArray.push(true) : checkedArray.push(false) )
       debugger;
       checkedArray.indexOf(false) !== -1 ? parent.CheckedState=this.props.individuallyChecked : parent.CheckedState=this.props.fullyChecked
       this.props.updateTree(parent)
@@ -86,14 +91,14 @@ export class TreeControl extends Component {
   }
 
   resetCheckedState = (tab) => {
-
     const unselectChildren = (childtab) => {
       childtab.CheckedState = this.props.unchecked
       childtab.ChildrenSelected=false;
       this.props.updateTree(childtab)
       const parent = this.props.findParent(tab)
+      debugger;
       this.setParentCheckedState(parent)
-      this._mapToParentTabs(parent, this.mapParentCheckedState)
+
     }
 
     const unselectIndividual = () => {
@@ -101,10 +106,8 @@ export class TreeControl extends Component {
       tab.ChildrenSelected=false;
       this.props.updateTree(tab)
       const parent = this.props.findParent(tab)
+      debugger;
       this.setParentCheckedState(parent)
-      this._mapToParentTabs(parent, this.mapParentCheckedState)
-
-
     }
 
     tab.HasChildren ? this._mapToChildTabs(tab, unselectChildren) : unselectIndividual()
@@ -118,7 +121,7 @@ export class TreeControl extends Component {
     const ChildTabs = parent.ChildTabs || []
     const length = ChildTabs.length
     const checkedArray = []
-
+    debugger;
     const checkParent= () => {
         parent.ChildrenSelected=true
         switch (true) {
@@ -126,17 +129,12 @@ export class TreeControl extends Component {
             parent.CheckedState=this.props.fullyChecked
             this.props.updateTree(parent)
             debugger;
-            this._mapToParentTabs(parent, this.mapParentCheckedState)
-
           return
           case checkedArray.indexOf(true) !== -1:
             parent.CheckedState=this.props.individuallyChecked
             this.props.updateTree(parent)
             debugger;
-            this._mapToParentTabs(parent, this.mapParentCheckedState)
-
           return
-
         }
 
       this.props.updateTree(parent)
@@ -145,7 +143,10 @@ export class TreeControl extends Component {
     }
 
     const noChildrenSelected = () => {
+        parent.CheckedState=this.props.individuallyChecked;
         parent.ChildrenSelected=false
+        debugger;
+        this.props.updateTree(parent)
     }
 
     ChildTabs.forEach(tab => tab.CheckedState ? checkedArray.push(true) : checkedArray.push(false))
@@ -185,7 +186,7 @@ export class TreeControl extends Component {
       this.props.updateTree(tab)
       const parent = this.props.findParent(tab)
       this.setParentCheckedState(parent)
-      this._mapToParentTabs(parent, this.mapParentCheckedState)
+
   }
 
 
