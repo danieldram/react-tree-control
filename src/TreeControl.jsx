@@ -34,7 +34,7 @@ export class TreeControl extends Component {
 
   _mapToParentTabs = (parent, fn) => {
     const condition = (par) => Object.keys(par).length > 0
-
+    parent = this.props.findParent(parent)
     const loop = () => {
       parent ? fn(parent) : null
       parent = parseInt(parent.TabId) !== -1  ? this.props.findParent(parent) : {}
@@ -79,10 +79,8 @@ export class TreeControl extends Component {
       const length = ChildTabs.length
       const checkedArray = []
       const truthyChecked = parent.ChildTabs.map(tab => tab.CheckedState==this.props.fullyChecked ?  checkedArray.push(true) : checkedArray.push(false) )
-
-      checkedArray.indexOf(false) !== -1 ? parent.CheckedState=this.props.individuallyChecked : parent.CheckedState=this.props.fullyChecked
-
       debugger;
+      checkedArray.indexOf(false) !== -1 ? parent.CheckedState=this.props.individuallyChecked : parent.CheckedState=this.props.fullyChecked
       this.props.updateTree(parent)
       debugger;
   }
@@ -127,12 +125,14 @@ export class TreeControl extends Component {
           case checkedArray.filter(bool => !!bool).length === length:
             parent.CheckedState=this.props.fullyChecked
             this.props.updateTree(parent)
+            debugger;
             this._mapToParentTabs(parent, this.mapParentCheckedState)
 
           return
           case checkedArray.indexOf(true) !== -1:
             parent.CheckedState=this.props.individuallyChecked
             this.props.updateTree(parent)
+            debugger;
             this._mapToParentTabs(parent, this.mapParentCheckedState)
 
           return
@@ -140,6 +140,7 @@ export class TreeControl extends Component {
         }
 
       this.props.updateTree(parent)
+      debugger;
 
     }
 
