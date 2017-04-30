@@ -10,7 +10,7 @@ export class TreeControlInteractor extends Component {
   }
 
   traverse = (comparator) => {
-    const copy = JSON.parse(JSON.stringify(this.state.tabs))
+    const copy = this.state.tabs
     let ChildTabs = copy
     const cached_childtabs = []
     cached_childtabs.push(ChildTabs)
@@ -48,10 +48,11 @@ export class TreeControlInteractor extends Component {
   }
 
   updateTree = (tabdata) => {
+
     let updateTab = null
     let newState = null
     const capture = (tab, copy) => {
-      updateTab=tab
+      tab=JSON.parse(JSON.stringify(tabdata))
       newState=copy
     }
     const find = (tab, copy) => {
