@@ -33,11 +33,11 @@ export class TreeControl extends Component {
   }
 
   _mapToParentTabs = (parent, fn) => {
-    const condition = (par) => !!par
-
+    const condition = (par) => Object.keys(par).length > 0
+    
     const loop = () => {
       parent ? fn(parent) : null
-      parent = parseInt(parent.ParentTabId) !== -1  ? this.props.findParent(parent) : null
+      parent = parseInt(parent.TabId) !== -1  ? this.props.findParent(parent) : {}
       condition(parent) ? loop() : exit()
     }
     const exit = () => null
