@@ -4,6 +4,13 @@ import {TreeControl} from './TreeControl'
 
 export class TreeControlInteractor extends Component {
 
+  constructor() {
+    super()
+    this.fullyChecked = 2
+    this.individuallyChecked = 1
+    this.unchecked = 0
+  }
+
   componentWillMount(){
     PortalTabs[0].ChildrenSelected=true;
     this.setState({tabs:PortalTabs})
@@ -34,7 +41,6 @@ export class TreeControlInteractor extends Component {
   }
 
   findParent = (tabdata) => {
-
     let parent = {}
     const capture = (tab) => {
       parent=tab || {}
@@ -48,7 +54,6 @@ export class TreeControlInteractor extends Component {
   }
 
   updateTree = (tabdata) => {
-
     let updateTab = null
     let newState = null
     const capture = (tab, copy) => {
@@ -61,18 +66,86 @@ export class TreeControlInteractor extends Component {
     this.traverse(find)
     console.log(newState)
     this.setState({tabs:newState})
+
   }
 
+  reAlignTree = () => {
 
+    let iterationsArray =  []
+    const iterations = (t) => t.ChildTabs.length ? iterationsArray.push(...t.ChildTabs) : null
+    this.traverse(iterations)
+
+    const realign = (tab)  => {
+      iterationsArray = []
+      let sum = 0;
+      let newState = null
+      const tabsWithChildren = []
+      const tabsWithoutChildren = []
+      const ChildTabs = tab.ChildTabs;
+
+
+      console.log(iterationsArray)
+
+
+      tab.ChildTabs.forEach( (t) => {
+        t.HasChildren ? tabsWithChildren.push(t) : tabsWithoutChildren.push(t)
+      })
+
+      const expect = tabsWithoutChildren.length + tabsWithChildren.length*this.fullyChecked
+
+      tabsWithoutChildren.forEach( t =>  {
+        t.CheckedState===this.individuallyChecked ? sum+=1 : null
+      })
+
+      tabsWithChildren.forEach( t =>  {
+        switch(true) {
+          case t.CheckedState===this.fullyChecked:
+            sum+=2
+          return
+          case t.CheckedState===this.individuallyChecked:
+            sum+=1
+          return
+          default:
+          return
+
+        }
+      })
+
+      sum=sum
+
+      switch (true) {
+        case sum === expect && tab.HasChildren :
+          tab.CheckedState=this.fullyChecked;
+
+        break
+        case sum!==0 && sum === expect && !tab.HasChildren :
+          tab.CheckedState=this.individuallyChecked;
+
+        break
+        case sum!==0 && sum < expect:
+          tab.CheckedState=this.individuallyChecked;
+        break
+        default:
+        break
+      }
+
+      this.updateTree(tab)
+    }
+
+    iterationsArray.forEach( iter => this.traverse(realign) )
+
+
+  }
 
   render() {
     return (
       <TreeControl
-          fullyChecked={2}
-          individuallyChecked={1}
-          unchecked={0}
+          fullyChecked={this.fullyChecked}
+          individuallyChecked={this.individuallyChecked}
+          unchecked={this.unchecked}
           tabs={this.state.tabs}
           updateTree={this.updateTree}
+          reAlignTree={this.reAlignTree}
           findParent={this.findParent} />
     )
   }
