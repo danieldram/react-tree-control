@@ -103,6 +103,7 @@ export class TreeControl extends Component {
     const parent = this.props.findParent(tab)
     this.setParentCheckedState(parent)
     this.props.reAlignTree()
+
   }
 
   setParentCheckedState(parent){
@@ -114,20 +115,23 @@ export class TreeControl extends Component {
         parent.ChildrenSelected=true
         switch (true) {
           case checkedArray.filter(bool => !!bool).length === length:
-            parent.CheckedState=this.props.fullyChecked
+            parent.CheckedState = parent.CheckedState ? this.props.fullyChecked : parent.CheckedState;
             this.props.updateTree(parent)
           return
 
           case checkedArray.indexOf(true) !== -1:
-            parent.CheckedState=this.props.individuallyChecked
+            parent.CheckedState= parent.CheckedState===2 ? this.props.individuallyChecked : parent.CheckedState;
             this.props.updateTree(parent)
+          return
+          default:
+
           return
         }
       this.props.updateTree(parent)
     }
 
     const noChildrenSelected = () => {
-        parent.CheckedState=this.props.individuallyChecked;
+        //parent.CheckedState = parent.CheckedState ? this.props.individuallyChecked;
         parent.ChildrenSelected=false
         this.props.updateTree(parent)
     }
@@ -226,12 +230,13 @@ export class TreeControl extends Component {
           return ChildTabs.length ? left() : right()
         }
 
+
         const li = () => (
               <li key={tab.Name}>
                 {tab.HasChildren ? bullet:null}
                 {checkbox}
                 {tab.Name}
-                {tab.CheckedState && tab.HasChildren && anyChildrenSelected(tab) ? <span>*</span> : <span></span>}
+                {tab.HasChildren && anyChildrenSelected(tab) ? <span>*</span> : <span></span>}
                 {tree}
               </li>)
         const parent = this.props.findParent(tab)
