@@ -54,18 +54,18 @@ export const PortalTabs =  [{
                         "CheckedState": 1,
                         "ChildTabs": []
                     }
-                    //,{
-                    //     "Name": "Inner Inner Sib 2",
-                    //     "TabId": "2012",
-                    //     "ImageUrl": "/DesktopModules/Admin/Tabs/images/Icon_Home.png",
-                    //     "Tooltip": "Homepage of the site",
-                    //     "ParentTabId": '201',
-                    //     "HasChildren": false,
-                    //     "IsOpen": false,
-                    //     "Selectable": true,
-                    //     "CheckedState": 1,
-                    //     "ChildTabs": []
-                    // }
+                    ,{
+                        "Name": "Inner Inner Sib 2",
+                        "TabId": "2012",
+                        "ImageUrl": "/DesktopModules/Admin/Tabs/images/Icon_Home.png",
+                        "Tooltip": "Homepage of the site",
+                        "ParentTabId": '201',
+                        "HasChildren": false,
+                        "IsOpen": false,
+                        "Selectable": true,
+                        "CheckedState": 1,
+                        "ChildTabs": []
+                    }
                   ]
               }]
         }
